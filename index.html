@@ -4,13 +4,16 @@
 <title>運営管理システム 画面一覧</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@700&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#14213D;--red:#D92B26;--ink:#1B1B21;--muted:#6B7280;--line:#E5E7EB;--paper:#F7F5F1;--soft:#FBEAE8;--blue:#295A9E;--softblue:#E6EBF5;--green:#1F7A50;--softgreen:#E6F4EC;--white:#fff}
+:root{--navy:#14213D;--red:#D0352A;--ink:#1B1B21;--muted:#6B7280;--line:#E5E7EB;--paper:#F7F5F1;--soft:#FBEAE8;--blue:#0A9BE0;--softblue:#E6EBF5;--green:#1F7A50;--softgreen:#E6F4EC;--white:#fff}
 *{box-sizing:border-box}body{margin:0;font-family:"Noto Sans JP",system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.6}
-header{background:var(--navy);color:#fff;padding:36px 24px 28px;position:relative;overflow:hidden}
-header:after{content:"";position:absolute;right:-160px;top:-260px;width:520px;height:520px;border-radius:50%;background:var(--red)}
-header .in{max-width:1280px;margin:0 auto;position:relative;z-index:1}
-h1{font-family:"Zen Kaku Gothic New","Noto Sans JP",sans-serif;font-size:32px;margin:0 0 6px}
-header p{margin:0;color:#C5CBD9;font-size:14px}
+header{background:#fff;color:var(--ink);padding:22px 24px 20px;border-bottom:1px solid var(--line);position:relative}
+header:before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--red) 0 50%,var(--blue) 50% 100%)}
+header .in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+header img.logo{height:64px;width:auto;display:block}
+header .ttl{border-left:2px solid var(--line);padding-left:22px}
+h1{font-family:"Zen Kaku Gothic New","Noto Sans JP",sans-serif;font-size:26px;margin:0 0 2px;color:var(--navy)}
+header p{margin:0;color:var(--muted);font-size:13px}
+@media (max-width:640px){header img.logo{height:48px}header .ttl{border-left:0;padding-left:0}}
 main{max-width:1280px;margin:0 auto;padding:24px}
 .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
 .bar input{flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px}
@@ -39,9 +42,9 @@ table{border-collapse:collapse;width:100%;background:#fff;font-size:13px}th,td{b
 .hidden{display:none}
 footer{color:var(--muted);font-size:12px;text-align:center;padding:24px}
 .tabs{display:flex;gap:6px;margin:8px 0 18px}.tabs button{border:1px solid var(--line);background:#fff;padding:8px 14px;border-radius:10px;cursor:pointer;font-size:14px}.tabs button.on{background:var(--red);border-color:var(--red);color:#fff}
-@media print{header:after{display:none}.bar,.tabs{display:none}.card{break-inside:avoid}}
+@media print{header:before{display:none}.bar,.tabs{display:none}.card{break-inside:avoid}}
 </style></head><body>
-<header><div class="in"><h1>運営管理システム 画面一覧</h1><p>版 0.1 ／ 2026-08-19 ／ 正は screens.json（生成物）</p></div></header>
+<header><div class="in"><img class="logo" src="logo.png" alt="NAKAYOSHI GROUP"><div class="ttl"><h1>運営管理システム 画面一覧</h1><p>版 0.1 ／ 2026-08-19 ／ 正は screens.json（生成物）</p></div></div></header>
 <main>
 <div class="tabs"><button class="on" data-view="cards">カード</button><button data-view="table">表</button><button data-view="matrix">権限マトリクス</button><button data-view="tables">テーブル×画面</button></div>
 <div class="bar">
