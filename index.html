@@ -13,7 +13,8 @@ header img.logo{height:64px;width:auto;display:block}
 header .ttl{border-left:2px solid var(--line);padding-left:22px}
 h1{font-family:"Zen Kaku Gothic New","Noto Sans JP",sans-serif;font-size:26px;margin:0 0 2px;color:var(--navy)}
 header p{margin:0;color:var(--muted);font-size:13px}
-@media (max-width:640px){header img.logo{height:48px}header .ttl{border-left:0;padding-left:0}}
+header .nav{margin-left:auto}header .nav a{color:var(--navy);font-weight:700;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px}
+@media (max-width:640px){header img.logo{height:48px}header .ttl{border-left:0;padding-left:0}header .nav{margin-left:0}}
 main{max-width:1280px;margin:0 auto;padding:24px}
 .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
 .bar input{flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:15px}
@@ -44,7 +45,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:24px}
 .tabs{display:flex;gap:6px;margin:8px 0 18px}.tabs button{border:1px solid var(--line);background:#fff;padding:8px 14px;border-radius:10px;cursor:pointer;font-size:14px}.tabs button.on{background:var(--red);border-color:var(--red);color:#fff}
 @media print{header:before{display:none}.bar,.tabs{display:none}.card{break-inside:avoid}}
 </style></head><body>
-<header><div class="in"><img class="logo" src="logo.png" alt="NAKAYOSHI GROUP"><div class="ttl"><h1>運営管理システム 画面一覧</h1><p>版 0.1 ／ 2026-08-19 ／ 正は screens.json（生成物）</p></div></div></header>
+<header><div class="in"><img class="logo" src="logo.png" alt="NAKAYOSHI GROUP"><div class="ttl"><h1>運営管理システム 画面一覧</h1><p>版 0.1 ／ 2026-08-19 ／ 正は screens.json（生成物）</p></div><nav class="nav"><a href="estimate/">お見積り →</a></nav></div></header>
 <main>
 <div class="tabs"><button class="on" data-view="cards">カード</button><button data-view="table">表</button><button data-view="matrix">権限マトリクス</button><button data-view="tables">テーブル×画面</button></div>
 <div class="bar">
