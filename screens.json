@@ -1,69 +1,1421 @@
 {
-  "meta": {"title": "運営管理システム 画面一覧", "version": "0.1", "date": "2026-08-19",
-    "roles": ["hq","sv","branch","member","sponsor"],
-    "roleLabels": {"hq":"本部","sv":"SV","branch":"支部長","member":"加盟店","sponsor":"スポンサー"},
-    "phases": {"1":"フェーズ1（土台）","2":"フェーズ2（見える化）","3":"フェーズ3（案件管理・任意）"}
+  "meta": {
+    "title": "運営管理システム 画面一覧",
+    "version": "0.2",
+    "date": "2026-08-19",
+    "roles": [
+      "hq",
+      "sv",
+      "branch",
+      "member",
+      "sponsor"
+    ],
+    "roleLabels": {
+      "hq": "本部",
+      "sv": "SV",
+      "branch": "支部長",
+      "member": "加盟店",
+      "sponsor": "スポンサー"
+    },
+    "phases": {
+      "1": "フェーズ1（土台）",
+      "2": "フェーズ2（見える化）",
+      "3": "フェーズ3（案件管理・任意）"
+    },
+    "plans": {
+      "full": "案① フル",
+      "lite": "案①′ ライト"
+    },
+    "plansNote": "案①′ ライト＝管理Web＋LINEは通知と会社紐付けのみ（予定・申込・アーカイブは HP／formrun のまま）"
   },
   "apps": [
-    {"key":"S","name":"LINEミニアプリ（加盟店・スポンサー・SV）","note":"LINEの中で開く。パスワードなし。文字大きめ・1画面1目的。"},
-    {"key":"A","name":"管理画面（本部・SV・支部長）","note":"PCブラウザ。メール＋パスワード（招待制）。SVはLINE側と同一人物。"}
+    {
+      "key": "S",
+      "name": "LINEミニアプリ（加盟店・スポンサー・SV）",
+      "note": "LINEの中で開く。パスワードなし。文字大きめ・1画面1目的。"
+    },
+    {
+      "key": "A",
+      "name": "管理画面（本部・SV・支部長）",
+      "note": "PCブラウザ。メール＋パスワード（招待制）。SVはLINE側と同一人物。"
+    }
   ],
   "areas": {
-    "auth":"認証・登録","home":"ホーム・予定","apply":"申込・出欠","notice":"お知らせ・配信","org":"加盟店・利用者","event":"イベント運営","intake":"取込・移行","sv":"SV活動","lead":"リード・KPI","file":"資料","settings":"設定・監査","project":"案件管理"
+    "auth": "認証・登録",
+    "home": "ホーム・予定",
+    "apply": "申込・出欠",
+    "notice": "お知らせ・配信",
+    "org": "加盟店・利用者",
+    "event": "イベント運営",
+    "intake": "取込・移行",
+    "sv": "SV活動",
+    "lead": "リード・KPI",
+    "file": "資料",
+    "settings": "設定・監査",
+    "project": "案件管理"
   },
   "screens": [
-    {"id":"S-01","app":"S","area":"auth","name":"起動・LINE認証","phase":1,"roles":["member","sponsor","sv"],"purpose":"LIFF起動時にIDトークンを検証しセッションを作る（利用者は操作なし）","elements":["ローディング","未登録なら S-02 へ","退会済みなら S-17 へ"],"tables":["users","org_memberships"],"notes":"検証はサーバー。クライアントのIDは信用しない"},
-    {"id":"S-02","app":"S","area":"auth","name":"初回登録（会社の紐付け）","phase":1,"roles":["member","sponsor","sv"],"purpose":"招待コード入力、または会社を検索して申請","elements":["招待コード入力","会社検索","氏名・役職入力","送信"],"tables":["invitations","organizations","users","org_memberships"],"notes":"高齢メンバー向けに本部が招待コードを紙で配る運用も可"},
-    {"id":"S-03","app":"S","area":"auth","name":"承認待ち","phase":1,"roles":["member","sponsor"],"purpose":"本部承認待ちの案内","elements":["状態表示","問い合わせ先"],"tables":["org_memberships"],"notes":""},
-    {"id":"S-04","app":"S","area":"home","name":"ホーム","phase":1,"roles":["member","sponsor","sv"],"purpose":"次の予定・新着お知らせ・自分の申込を一目で","elements":["次の予定カード","お知らせ新着","申込中一覧","リッチメニュー相当のボタン4つ"],"tables":["events","event_registrations","announcements"],"notes":"所属グループに関係する予定のみ"},
-    {"id":"S-05","app":"S","area":"home","name":"予定一覧","phase":1,"roles":["member","sponsor","sv"],"purpose":"月切替で自分に関係する予定を見る（会員ページの置き換え）","elements":["月切替","種別フィルタ","自分のグループ／全体タブ","一覧→S-06"],"tables":["events","event_targets","org_groups"],"notes":""},
-    {"id":"S-06","app":"S","area":"home","name":"イベント詳細","phase":1,"roles":["member","sponsor","sv"],"purpose":"内容・日時・Zoom・資料・アーカイブを見て申し込む","elements":["日時・講師・内容","Zoomリンク（ログイン済のみ）","資料・アーカイブリンク","申込ボタン→S-07","定員・締切"],"tables":["events","files"],"notes":"Zoom情報は公開範囲を守る"},
-    {"id":"S-07","app":"S","area":"apply","name":"申込（参加者選択）","phase":1,"roles":["member","sponsor","sv"],"purpose":"自分と同僚をまとめて申し込む","elements":["参加者チェック（自社メンバー）","メモ","確認→S-08"],"tables":["event_registrations","org_memberships"],"notes":"代表者は同僚分を申込できる"},
-    {"id":"S-08","app":"S","area":"apply","name":"申込完了／キャンセル","phase":1,"roles":["member","sponsor","sv"],"purpose":"完了表示とキャンセル操作","elements":["完了メッセージ","キャンセル（締切前）","カレンダー追加"],"tables":["event_registrations"],"notes":"完了時にLINEへ確認メッセージ"},
-    {"id":"S-09","app":"S","area":"apply","name":"申込履歴・出欠","phase":1,"roles":["member","sponsor","sv"],"purpose":"自分／自社の申込と出欠結果を見る","elements":["自分タブ／自社タブ","出欠ステータス","過去回のアーカイブリンク"],"tables":["event_registrations","events"],"notes":""},
-    {"id":"S-10","app":"S","area":"notice","name":"お知らせ一覧","phase":1,"roles":["member","sponsor","sv"],"purpose":"本部からのお知らせを時系列で","elements":["一覧","未読バッジ"],"tables":["announcements","announcement_reads"],"notes":"既読テーブルが要る（落とし穴の教訓）"},
-    {"id":"S-11","app":"S","area":"notice","name":"お知らせ詳細","phase":1,"roles":["member","sponsor","sv"],"purpose":"本文・添付を見る","elements":["本文","添付","関連イベントへのリンク"],"tables":["announcements","files"],"notes":""},
-    {"id":"S-12","app":"S","area":"org","name":"会社情報・メンバー","phase":1,"roles":["member","sponsor","sv"],"purpose":"自社の登録情報とメンバーを見る／代表者はメンバー招待","elements":["会社情報","メンバー一覧","招待コード発行（代表者）"],"tables":["organizations","org_memberships","invitations"],"notes":""},
-    {"id":"S-13","app":"S","area":"org","name":"マイページ","phase":1,"roles":["member","sponsor","sv"],"purpose":"氏名・役職・通知設定","elements":["氏名・役職","リマインド受信設定","ログアウト"],"tables":["users","user_settings"],"notes":""},
-    {"id":"S-14","app":"S","area":"sv","name":"SVメニュー：担当加盟店一覧","phase":2,"roles":["sv"],"purpose":"担当会社の状況を一覧で","elements":["担当会社リスト","未面談・未提出バッジ"],"tables":["sv_assignments","organizations","sv_activities"],"notes":"SVロールのみ表示"},
-    {"id":"S-15","app":"S","area":"sv","name":"担当加盟店 詳細（LINE）","phase":2,"roles":["sv"],"purpose":"面談履歴・チェック項目を確認","elements":["基本情報","面談履歴","チェック項目"],"tables":["sv_activities","organizations"],"notes":""},
-    {"id":"S-16","app":"S","area":"sv","name":"面談記録 入力（LINE）","phase":2,"roles":["sv"],"purpose":"訪問直後にスマホで記録","elements":["日時・手段","内容","チェック項目"],"tables":["sv_activities"],"notes":""},
-    {"id":"S-17","app":"S","area":"auth","name":"利用停止（退会・休会）","phase":1,"roles":["member","sponsor"],"purpose":"退会済みユーザーに閲覧不可を案内","elements":["案内文","問い合わせ先"],"tables":["organizations"],"notes":"RLSでも遮断。画面は案内のみ"},
-    {"id":"S-18","app":"S","area":"auth","name":"エラー／メンテナンス","phase":1,"roles":["member","sponsor","sv"],"purpose":"障害・メンテ時の案内","elements":["案内文"],"tables":[],"notes":""},
-
-    {"id":"A-01","app":"A","area":"auth","name":"ログイン／パスワード再設定","phase":1,"roles":["hq","sv","branch"],"purpose":"メール＋パスワードでログイン（招待制）","elements":["ログイン","再設定メール","MFA（任意）"],"tables":["auth.users"],"notes":"Supabase Auth"},
-    {"id":"A-02","app":"A","area":"home","name":"ダッシュボード","phase":1,"roles":["hq","sv","branch"],"purpose":"今週の予定・未処理・通数を一目で","elements":["今週のイベント","未処理の取込件数","承認待ち件数","LINE通数（当月）","申込状況"],"tables":["events","form_intakes","org_memberships","notification_logs"],"notes":"SV・支部長は担当範囲に限定"},
-    {"id":"A-10","app":"A","area":"org","name":"加盟店一覧","phase":1,"roles":["hq","sv","branch"],"purpose":"検索・絞り込み・CSV出力","elements":["検索","フィルタ（ブロック・エリア・期・グループ・SV・状態）","CSV","一覧→A-11"],"tables":["organizations","org_groups","sv_assignments"],"notes":"現行「加盟店一覧」タブの置き換え"},
-    {"id":"A-11","app":"A","area":"org","name":"加盟店 詳細","phase":1,"roles":["hq","sv","branch"],"purpose":"基本情報・所属・メンバー・申込履歴を1画面で","elements":["基本情報","所属グループ","担当SV","メンバー一覧","申込・出欠履歴","SV活動（P2）","案件シートリンク"],"tables":["organizations","org_groups","org_memberships","event_registrations","sv_activities"],"notes":""},
-    {"id":"A-12","app":"A","area":"org","name":"加盟店 新規／編集","phase":1,"roles":["hq"],"purpose":"名簿の登録・更新","elements":["会社名・加盟店番号・期・ブロック・エリア・拠点","コース開始年月","紹介者","chatworkグループ","案件シートURL"],"tables":["organizations"],"notes":"入力規則で表記ゆれを防ぐ"},
-    {"id":"A-13","app":"A","area":"org","name":"入退会処理","phase":1,"roles":["hq"],"purpose":"休会・退会の実行と影響確認","elements":["状態変更","退会日・理由","影響（配信停止・閲覧停止）の確認ダイアログ"],"tables":["organizations","org_memberships","audit_logs"],"notes":"退会＝即遮断"},
-    {"id":"A-14","app":"A","area":"org","name":"スポンサー一覧／詳細／編集","phase":1,"roles":["hq"],"purpose":"スポンサー名簿","elements":["一覧","詳細","編集"],"tables":["organizations"],"notes":"kind=sponsor"},
-    {"id":"A-15","app":"A","area":"org","name":"利用者一覧","phase":1,"roles":["hq"],"purpose":"人単位の一覧、LINE連携状況、招待","elements":["一覧","LINE連携済／未","招待コード発行","ロール付与（SV・支部長）"],"tables":["users","org_memberships","invitations"],"notes":""},
-    {"id":"A-16","app":"A","area":"org","name":"紐付け申請の承認","phase":1,"roles":["hq"],"purpose":"S-02からの申請を承認・却下","elements":["申請一覧","会社の確認","承認／却下"],"tables":["org_memberships"],"notes":"承認でLINEに通知"},
-    {"id":"A-17","app":"A","area":"org","name":"グループ管理","phase":1,"roles":["hq"],"purpose":"勉強会A/B/C・進捗会 北中南・ブロック・支部・コースの定義と所属の一括変更","elements":["グループ一覧","所属メンバー","一括移動（年度替わり）"],"tables":["groups","org_groups"],"notes":"年度替わりの運用手順を runbook に"},
-    {"id":"A-18","app":"A","area":"org","name":"SV割当","phase":1,"roles":["hq"],"purpose":"SVと担当加盟店の割当","elements":["SV一覧","担当会社の追加・解除"],"tables":["sv_assignments"],"notes":""},
-    {"id":"A-20","app":"A","area":"event","name":"イベント一覧","phase":1,"roles":["hq","sv","branch"],"purpose":"月・リスト表示、種別・グループで絞り込み","elements":["月／リスト切替","フィルタ","新規→A-21","一覧→A-22"],"tables":["events","event_targets"],"notes":""},
-    {"id":"A-21","app":"A","area":"event","name":"イベント 作成／編集","phase":1,"roles":["hq"],"purpose":"勉強会・進捗会・セミナー・会議の登録","elements":["種別","対象グループ","日時・回数表記","講師・内容","Zoom URL/ID/パス","会場","資料・アーカイブURL","定員・締切","公開範囲","通知設定（案内・リマインド）"],"tables":["events","event_targets","files","notifications"],"notes":"複製機能で毎月の登録を楽に"},
-    {"id":"A-22","app":"A","area":"event","name":"イベント 詳細・出欠確定","phase":1,"roles":["hq","sv","branch"],"purpose":"申込者一覧と出欠の確定","elements":["申込者一覧（会社別）","出欠一括確定（出席・欠席・遅刻）","手動追加","CSV"],"tables":["event_registrations"],"notes":"SV・支部長は閲覧のみ（要確認）"},
-    {"id":"A-23","app":"A","area":"event","name":"年間予定 一括取込","phase":1,"roles":["hq"],"purpose":"現行シート形式のCSVから年間予定を登録","elements":["テンプレDL","アップロード","検証結果","取込実行"],"tables":["events"],"notes":"dry-run 必須"},
-    {"id":"A-24","app":"A","area":"event","name":"出欠マトリクス","phase":1,"roles":["hq","sv","branch"],"purpose":"月別×会社の出欠表（現行「進捗シート」の置き換え）","elements":["グループ切替","月範囲","出欠記号","CSV"],"tables":["event_registrations","organizations"],"notes":""},
-    {"id":"A-25","app":"A","area":"event","name":"参加者名簿（回ごと）","phase":1,"roles":["hq"],"purpose":"セミナー回ごとの参加者名簿（現行「参加者名簿」の置き換え）","elements":["回選択","参加者一覧","CSV"],"tables":["event_registrations","users","organizations"],"notes":""},
-    {"id":"A-30","app":"A","area":"notice","name":"配信 新規","phase":1,"roles":["hq"],"purpose":"LINE配信の作成・予約","elements":["対象（グループ・ロール・会社）","文面","予約日時","プレビュー","送信数の見積"],"tables":["notifications"],"notes":"通数上限を表示"},
-    {"id":"A-31","app":"A","area":"notice","name":"配信履歴・通数","phase":1,"roles":["hq"],"purpose":"送信結果と月間通数の監視","elements":["履歴一覧","成功／失敗","月間通数グラフ"],"tables":["notification_logs"],"notes":"ライトプラン5,000通の監視"},
-    {"id":"A-32","app":"A","area":"notice","name":"お知らせ管理","phase":1,"roles":["hq"],"purpose":"アプリ内お知らせの作成・公開","elements":["一覧","作成／編集","公開範囲","添付"],"tables":["announcements","files"],"notes":""},
-    {"id":"A-40","app":"A","area":"intake","name":"formrun 取込一覧","phase":1,"roles":["hq"],"purpose":"Webhookで受けた申込の処理状況","elements":["未処理／突合済／無視","再処理","エラー表示"],"tables":["form_intakes"],"notes":""},
-    {"id":"A-41","app":"A","area":"intake","name":"取込 詳細・手動突合","phase":1,"roles":["hq"],"purpose":"名寄せできなかった申込を人が紐付け","elements":["受信内容","候補ユーザー・会社","イベント選択","確定"],"tables":["form_intakes","event_registrations","users"],"notes":""},
-    {"id":"A-50","app":"A","area":"intake","name":"データ取込（名簿・移行）","phase":1,"roles":["hq"],"purpose":"Excel名簿・加盟店一覧CSVの取込と検証","elements":["テンプレDL","アップロード","検証レポート（重複・欠損）","dry-run","実行"],"tables":["organizations","users","org_groups"],"notes":"移行時と年次の更新で使う"},
-    {"id":"A-60","app":"A","area":"settings","name":"設定","phase":1,"roles":["hq"],"purpose":"管理者・権限、LINEチャネル、リマインド既定、通知テンプレ","elements":["管理者一覧・招待","ロール","LINE設定","リマインド既定（前日10:00・1時間前）","テンプレ文面"],"tables":["users","settings","notification_templates"],"notes":""},
-    {"id":"A-61","app":"A","area":"settings","name":"監査ログ","phase":1,"roles":["hq"],"purpose":"誰が何を変えたか","elements":["一覧","フィルタ","差分表示"],"tables":["audit_logs"],"notes":""},
-    {"id":"A-70","app":"A","area":"sv","name":"SV活動 一覧","phase":2,"roles":["hq","sv"],"purpose":"面談・訪問履歴の一覧","elements":["会社×月","チェック項目の進捗","未面談一覧"],"tables":["sv_activities"],"notes":"現行「SV活動」タブの置き換え"},
-    {"id":"A-71","app":"A","area":"sv","name":"SV活動 記録","phase":2,"roles":["hq","sv"],"purpose":"面談記録の入力（PC）","elements":["日時・手段・担当SV","内容","チェック項目（エリア撤廃説明・決算書提出等）","連絡ログ"],"tables":["sv_activities"],"notes":""},
-    {"id":"A-72","app":"A","area":"sv","name":"SVダッシュボード","phase":2,"roles":["hq","sv"],"purpose":"SV別の担当状況・未対応","elements":["SV別カード","未面談・未提出","今月の予定"],"tables":["sv_activities","sv_assignments"],"notes":""},
-    {"id":"A-80","app":"A","area":"lead","name":"リード（見込み客）一覧","phase":2,"roles":["hq","sv"],"purpose":"導入セミナー→面談→加盟のパイプライン","elements":["ステータス列","支部・紹介者・追客担当","フィルタ"],"tables":["leads"],"notes":"現行「導入セミナー声掛」の置き換え"},
-    {"id":"A-81","app":"A","area":"lead","name":"リード 詳細・活動","phase":2,"roles":["hq","sv"],"purpose":"受講・面談・加盟確定の記録","elements":["基本情報","活動履歴","加盟確定→加盟店へ変換"],"tables":["leads","lead_activities","organizations"],"notes":"formrunの導入セミナー申込からリード自動生成"},
-    {"id":"A-82","app":"A","area":"lead","name":"KPI","phase":2,"roles":["hq"],"purpose":"導入セミナー参加数・加盟数の月次 目標／実績（ブロック・SV別）","elements":["目標入力","実績自動集計","達成率","グラフ"],"tables":["kpi_targets","leads","event_registrations"],"notes":"現行「KPIグラフ」の置き換え"},
-    {"id":"A-90","app":"A","area":"file","name":"資料管理","phase":2,"roles":["hq"],"purpose":"レジュメ・資料のアップロードとイベント紐付け","elements":["アップロード","公開範囲","イベント紐付け"],"tables":["files"],"notes":"Supabase Storage"},
-    {"id":"A-95","app":"A","area":"project","name":"加盟店 案件管理（各社）","phase":3,"roles":["hq","sv","member"],"purpose":"法人DM実績と案件表の入力・閲覧","elements":["法人DM一覧・入力","案件一覧・入力","会社別集計"],"tables":["dm_campaigns","projects"],"notes":"任意。自社・SV・本部のみ閲覧"},
-    {"id":"A-96","app":"A","area":"project","name":"案件 集計（進捗会用）","phase":3,"roles":["hq","sv"],"purpose":"グループ別・月別の集計","elements":["集計表","CSV"],"tables":["dm_campaigns","projects"],"notes":"任意"}
+    {
+      "id": "S-01",
+      "app": "S",
+      "area": "auth",
+      "name": "起動・LINE認証",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor",
+        "sv"
+      ],
+      "purpose": "LIFF起動時にIDトークンを検証しセッションを作る（利用者は操作なし）",
+      "elements": [
+        "ローディング",
+        "未登録なら S-02 へ",
+        "退会済みなら S-17 へ"
+      ],
+      "tables": [
+        "users",
+        "org_memberships"
+      ],
+      "notes": "検証はサーバー。クライアントのIDは信用しない",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "S-02",
+      "app": "S",
+      "area": "auth",
+      "name": "初回登録（会社の紐付け）",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor",
+        "sv"
+      ],
+      "purpose": "招待コード入力、または会社を検索して申請",
+      "elements": [
+        "招待コード入力",
+        "会社検索",
+        "氏名・役職入力",
+        "送信"
+      ],
+      "tables": [
+        "invitations",
+        "organizations",
+        "users",
+        "org_memberships"
+      ],
+      "notes": "高齢メンバー向けに本部が招待コードを紙で配る運用も可",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "S-03",
+      "app": "S",
+      "area": "auth",
+      "name": "承認待ち",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor"
+      ],
+      "purpose": "本部承認待ちの案内",
+      "elements": [
+        "状態表示",
+        "問い合わせ先"
+      ],
+      "tables": [
+        "org_memberships"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "S-04",
+      "app": "S",
+      "area": "home",
+      "name": "ホーム",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor",
+        "sv"
+      ],
+      "purpose": "次の予定・新着お知らせ・自分の申込を一目で",
+      "elements": [
+        "次の予定カード",
+        "お知らせ新着",
+        "申込中一覧",
+        "リッチメニュー相当のボタン4つ"
+      ],
+      "tables": [
+        "events",
+        "event_registrations",
+        "announcements"
+      ],
+      "notes": "所属グループに関係する予定のみ",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "S-05",
+      "app": "S",
+      "area": "home",
+      "name": "予定一覧",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor",
+        "sv"
+      ],
+      "purpose": "月切替で自分に関係する予定を見る（会員ページの置き換え）",
+      "elements": [
+        "月切替",
+        "種別フィルタ",
+        "自分のグループ／全体タブ",
+        "一覧→S-06"
+      ],
+      "tables": [
+        "events",
+        "event_targets",
+        "org_groups"
+      ],
+      "notes": "",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "S-06",
+      "app": "S",
+      "area": "home",
+      "name": "イベント詳細",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor",
+        "sv"
+      ],
+      "purpose": "内容・日時・Zoom・資料・アーカイブを見て申し込む",
+      "elements": [
+        "日時・講師・内容",
+        "Zoomリンク（ログイン済のみ）",
+        "資料・アーカイブリンク",
+        "申込ボタン→S-07",
+        "定員・締切"
+      ],
+      "tables": [
+        "events",
+        "files"
+      ],
+      "notes": "Zoom情報は公開範囲を守る",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "S-07",
+      "app": "S",
+      "area": "apply",
+      "name": "申込（参加者選択）",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor",
+        "sv"
+      ],
+      "purpose": "自分と同僚をまとめて申し込む",
+      "elements": [
+        "参加者チェック（自社メンバー）",
+        "メモ",
+        "確認→S-08"
+      ],
+      "tables": [
+        "event_registrations",
+        "org_memberships"
+      ],
+      "notes": "代表者は同僚分を申込できる",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "S-08",
+      "app": "S",
+      "area": "apply",
+      "name": "申込完了／キャンセル",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor",
+        "sv"
+      ],
+      "purpose": "完了表示とキャンセル操作",
+      "elements": [
+        "完了メッセージ",
+        "キャンセル（締切前）",
+        "カレンダー追加"
+      ],
+      "tables": [
+        "event_registrations"
+      ],
+      "notes": "完了時にLINEへ確認メッセージ",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "S-09",
+      "app": "S",
+      "area": "apply",
+      "name": "申込履歴・出欠",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor",
+        "sv"
+      ],
+      "purpose": "自分／自社の申込と出欠結果を見る",
+      "elements": [
+        "自分タブ／自社タブ",
+        "出欠ステータス",
+        "過去回のアーカイブリンク"
+      ],
+      "tables": [
+        "event_registrations",
+        "events"
+      ],
+      "notes": "",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "S-10",
+      "app": "S",
+      "area": "notice",
+      "name": "お知らせ一覧",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor",
+        "sv"
+      ],
+      "purpose": "本部からのお知らせを時系列で",
+      "elements": [
+        "一覧",
+        "未読バッジ"
+      ],
+      "tables": [
+        "announcements",
+        "announcement_reads"
+      ],
+      "notes": "既読テーブルが要る（落とし穴の教訓）",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "S-11",
+      "app": "S",
+      "area": "notice",
+      "name": "お知らせ詳細",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor",
+        "sv"
+      ],
+      "purpose": "本文・添付を見る",
+      "elements": [
+        "本文",
+        "添付",
+        "関連イベントへのリンク"
+      ],
+      "tables": [
+        "announcements",
+        "files"
+      ],
+      "notes": "",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "S-12",
+      "app": "S",
+      "area": "org",
+      "name": "会社情報・メンバー",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor",
+        "sv"
+      ],
+      "purpose": "自社の登録情報とメンバーを見る／代表者はメンバー招待",
+      "elements": [
+        "会社情報",
+        "メンバー一覧",
+        "招待コード発行（代表者）"
+      ],
+      "tables": [
+        "organizations",
+        "org_memberships",
+        "invitations"
+      ],
+      "notes": "",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "S-13",
+      "app": "S",
+      "area": "org",
+      "name": "マイページ",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor",
+        "sv"
+      ],
+      "purpose": "氏名・役職・通知設定",
+      "elements": [
+        "氏名・役職",
+        "リマインド受信設定",
+        "ログアウト"
+      ],
+      "tables": [
+        "users",
+        "user_settings"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "S-14",
+      "app": "S",
+      "area": "sv",
+      "name": "SVメニュー：担当加盟店一覧",
+      "phase": 2,
+      "roles": [
+        "sv"
+      ],
+      "purpose": "担当会社の状況を一覧で",
+      "elements": [
+        "担当会社リスト",
+        "未面談・未提出バッジ"
+      ],
+      "tables": [
+        "sv_assignments",
+        "organizations",
+        "sv_activities"
+      ],
+      "notes": "SVロールのみ表示",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "S-15",
+      "app": "S",
+      "area": "sv",
+      "name": "担当加盟店 詳細（LINE）",
+      "phase": 2,
+      "roles": [
+        "sv"
+      ],
+      "purpose": "面談履歴・チェック項目を確認",
+      "elements": [
+        "基本情報",
+        "面談履歴",
+        "チェック項目"
+      ],
+      "tables": [
+        "sv_activities",
+        "organizations"
+      ],
+      "notes": "",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "S-16",
+      "app": "S",
+      "area": "sv",
+      "name": "面談記録 入力（LINE）",
+      "phase": 2,
+      "roles": [
+        "sv"
+      ],
+      "purpose": "訪問直後にスマホで記録",
+      "elements": [
+        "日時・手段",
+        "内容",
+        "チェック項目"
+      ],
+      "tables": [
+        "sv_activities"
+      ],
+      "notes": "",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "S-17",
+      "app": "S",
+      "area": "auth",
+      "name": "利用停止（退会・休会）",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor"
+      ],
+      "purpose": "退会済みユーザーに閲覧不可を案内",
+      "elements": [
+        "案内文",
+        "問い合わせ先"
+      ],
+      "tables": [
+        "organizations"
+      ],
+      "notes": "RLSでも遮断。画面は案内のみ",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "S-18",
+      "app": "S",
+      "area": "auth",
+      "name": "エラー／メンテナンス",
+      "phase": 1,
+      "roles": [
+        "member",
+        "sponsor",
+        "sv"
+      ],
+      "purpose": "障害・メンテ時の案内",
+      "elements": [
+        "案内文"
+      ],
+      "tables": [],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-01",
+      "app": "A",
+      "area": "auth",
+      "name": "ログイン／パスワード再設定",
+      "phase": 1,
+      "roles": [
+        "hq",
+        "sv",
+        "branch"
+      ],
+      "purpose": "メール＋パスワードでログイン（招待制）",
+      "elements": [
+        "ログイン",
+        "再設定メール",
+        "MFA（任意）"
+      ],
+      "tables": [
+        "auth.users"
+      ],
+      "notes": "Supabase Auth",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-02",
+      "app": "A",
+      "area": "home",
+      "name": "ダッシュボード",
+      "phase": 1,
+      "roles": [
+        "hq",
+        "sv",
+        "branch"
+      ],
+      "purpose": "今週の予定・未処理・通数を一目で",
+      "elements": [
+        "今週のイベント",
+        "未処理の取込件数",
+        "承認待ち件数",
+        "LINE通数（当月）",
+        "申込状況"
+      ],
+      "tables": [
+        "events",
+        "form_intakes",
+        "org_memberships",
+        "notification_logs"
+      ],
+      "notes": "SV・支部長は担当範囲に限定",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-10",
+      "app": "A",
+      "area": "org",
+      "name": "加盟店一覧",
+      "phase": 1,
+      "roles": [
+        "hq",
+        "sv",
+        "branch"
+      ],
+      "purpose": "検索・絞り込み・CSV出力",
+      "elements": [
+        "検索",
+        "フィルタ（ブロック・エリア・期・グループ・SV・状態）",
+        "CSV",
+        "一覧→A-11"
+      ],
+      "tables": [
+        "organizations",
+        "org_groups",
+        "sv_assignments"
+      ],
+      "notes": "現行「加盟店一覧」タブの置き換え",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-11",
+      "app": "A",
+      "area": "org",
+      "name": "加盟店 詳細",
+      "phase": 1,
+      "roles": [
+        "hq",
+        "sv",
+        "branch"
+      ],
+      "purpose": "基本情報・所属・メンバー・申込履歴を1画面で",
+      "elements": [
+        "基本情報",
+        "所属グループ",
+        "担当SV",
+        "メンバー一覧",
+        "申込・出欠履歴",
+        "SV活動（P2）",
+        "案件シートリンク"
+      ],
+      "tables": [
+        "organizations",
+        "org_groups",
+        "org_memberships",
+        "event_registrations",
+        "sv_activities"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-12",
+      "app": "A",
+      "area": "org",
+      "name": "加盟店 新規／編集",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "名簿の登録・更新",
+      "elements": [
+        "会社名・加盟店番号・期・ブロック・エリア・拠点",
+        "コース開始年月",
+        "紹介者",
+        "chatworkグループ",
+        "案件シートURL"
+      ],
+      "tables": [
+        "organizations"
+      ],
+      "notes": "入力規則で表記ゆれを防ぐ",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-13",
+      "app": "A",
+      "area": "org",
+      "name": "入退会処理",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "休会・退会の実行と影響確認",
+      "elements": [
+        "状態変更",
+        "退会日・理由",
+        "影響（配信停止・閲覧停止）の確認ダイアログ"
+      ],
+      "tables": [
+        "organizations",
+        "org_memberships",
+        "audit_logs"
+      ],
+      "notes": "退会＝即遮断",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-14",
+      "app": "A",
+      "area": "org",
+      "name": "スポンサー一覧／詳細／編集",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "スポンサー名簿",
+      "elements": [
+        "一覧",
+        "詳細",
+        "編集"
+      ],
+      "tables": [
+        "organizations"
+      ],
+      "notes": "kind=sponsor",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-15",
+      "app": "A",
+      "area": "org",
+      "name": "利用者一覧",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "人単位の一覧、LINE連携状況、招待",
+      "elements": [
+        "一覧",
+        "LINE連携済／未",
+        "招待コード発行",
+        "ロール付与（SV・支部長）"
+      ],
+      "tables": [
+        "users",
+        "org_memberships",
+        "invitations"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-16",
+      "app": "A",
+      "area": "org",
+      "name": "紐付け申請の承認",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "S-02からの申請を承認・却下",
+      "elements": [
+        "申請一覧",
+        "会社の確認",
+        "承認／却下"
+      ],
+      "tables": [
+        "org_memberships"
+      ],
+      "notes": "承認でLINEに通知",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-17",
+      "app": "A",
+      "area": "org",
+      "name": "グループ管理",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "勉強会A/B/C・進捗会 北中南・ブロック・支部・コースの定義と所属の一括変更",
+      "elements": [
+        "グループ一覧",
+        "所属メンバー",
+        "一括移動（年度替わり）"
+      ],
+      "tables": [
+        "groups",
+        "org_groups"
+      ],
+      "notes": "年度替わりの運用手順を runbook に",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-18",
+      "app": "A",
+      "area": "org",
+      "name": "SV割当",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "SVと担当加盟店の割当",
+      "elements": [
+        "SV一覧",
+        "担当会社の追加・解除"
+      ],
+      "tables": [
+        "sv_assignments"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-20",
+      "app": "A",
+      "area": "event",
+      "name": "イベント一覧",
+      "phase": 1,
+      "roles": [
+        "hq",
+        "sv",
+        "branch"
+      ],
+      "purpose": "月・リスト表示、種別・グループで絞り込み",
+      "elements": [
+        "月／リスト切替",
+        "フィルタ",
+        "新規→A-21",
+        "一覧→A-22"
+      ],
+      "tables": [
+        "events",
+        "event_targets"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-21",
+      "app": "A",
+      "area": "event",
+      "name": "イベント 作成／編集",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "勉強会・進捗会・セミナー・会議の登録",
+      "elements": [
+        "種別",
+        "対象グループ",
+        "日時・回数表記",
+        "講師・内容",
+        "Zoom URL/ID/パス",
+        "会場",
+        "資料・アーカイブURL",
+        "定員・締切",
+        "公開範囲",
+        "通知設定（案内・リマインド）"
+      ],
+      "tables": [
+        "events",
+        "event_targets",
+        "files",
+        "notifications"
+      ],
+      "notes": "複製機能で毎月の登録を楽に",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-22",
+      "app": "A",
+      "area": "event",
+      "name": "イベント 詳細・出欠確定",
+      "phase": 1,
+      "roles": [
+        "hq",
+        "sv",
+        "branch"
+      ],
+      "purpose": "申込者一覧と出欠の確定",
+      "elements": [
+        "申込者一覧（会社別）",
+        "出欠一括確定（出席・欠席・遅刻）",
+        "手動追加",
+        "CSV"
+      ],
+      "tables": [
+        "event_registrations"
+      ],
+      "notes": "SV・支部長は閲覧のみ（要確認）",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-23",
+      "app": "A",
+      "area": "event",
+      "name": "年間予定 一括取込",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "現行シート形式のCSVから年間予定を登録",
+      "elements": [
+        "テンプレDL",
+        "アップロード",
+        "検証結果",
+        "取込実行"
+      ],
+      "tables": [
+        "events"
+      ],
+      "notes": "dry-run 必須",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-24",
+      "app": "A",
+      "area": "event",
+      "name": "出欠マトリクス",
+      "phase": 1,
+      "roles": [
+        "hq",
+        "sv",
+        "branch"
+      ],
+      "purpose": "月別×会社の出欠表（現行「進捗シート」の置き換え）",
+      "elements": [
+        "グループ切替",
+        "月範囲",
+        "出欠記号",
+        "CSV"
+      ],
+      "tables": [
+        "event_registrations",
+        "organizations"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-25",
+      "app": "A",
+      "area": "event",
+      "name": "参加者名簿（回ごと）",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "セミナー回ごとの参加者名簿（現行「参加者名簿」の置き換え）",
+      "elements": [
+        "回選択",
+        "参加者一覧",
+        "CSV"
+      ],
+      "tables": [
+        "event_registrations",
+        "users",
+        "organizations"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-30",
+      "app": "A",
+      "area": "notice",
+      "name": "配信 新規",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "LINE配信の作成・予約",
+      "elements": [
+        "対象（グループ・ロール・会社）",
+        "文面",
+        "予約日時",
+        "プレビュー",
+        "送信数の見積"
+      ],
+      "tables": [
+        "notifications"
+      ],
+      "notes": "通数上限を表示",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-31",
+      "app": "A",
+      "area": "notice",
+      "name": "配信履歴・通数",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "送信結果と月間通数の監視",
+      "elements": [
+        "履歴一覧",
+        "成功／失敗",
+        "月間通数グラフ"
+      ],
+      "tables": [
+        "notification_logs"
+      ],
+      "notes": "ライトプラン5,000通の監視",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-32",
+      "app": "A",
+      "area": "notice",
+      "name": "お知らせ管理",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "アプリ内お知らせの作成・公開",
+      "elements": [
+        "一覧",
+        "作成／編集",
+        "公開範囲",
+        "添付"
+      ],
+      "tables": [
+        "announcements",
+        "files"
+      ],
+      "notes": "",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "A-40",
+      "app": "A",
+      "area": "intake",
+      "name": "formrun 取込一覧",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "Webhookで受けた申込の処理状況",
+      "elements": [
+        "未処理／突合済／無視",
+        "再処理",
+        "エラー表示"
+      ],
+      "tables": [
+        "form_intakes"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-41",
+      "app": "A",
+      "area": "intake",
+      "name": "取込 詳細・手動突合",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "名寄せできなかった申込を人が紐付け",
+      "elements": [
+        "受信内容",
+        "候補ユーザー・会社",
+        "イベント選択",
+        "確定"
+      ],
+      "tables": [
+        "form_intakes",
+        "event_registrations",
+        "users"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-50",
+      "app": "A",
+      "area": "intake",
+      "name": "データ取込（名簿・移行）",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "Excel名簿・加盟店一覧CSVの取込と検証",
+      "elements": [
+        "テンプレDL",
+        "アップロード",
+        "検証レポート（重複・欠損）",
+        "dry-run",
+        "実行"
+      ],
+      "tables": [
+        "organizations",
+        "users",
+        "org_groups"
+      ],
+      "notes": "移行時と年次の更新で使う",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-60",
+      "app": "A",
+      "area": "settings",
+      "name": "設定",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "管理者・権限、LINEチャネル、リマインド既定、通知テンプレ",
+      "elements": [
+        "管理者一覧・招待",
+        "ロール",
+        "LINE設定",
+        "リマインド既定（前日10:00・1時間前）",
+        "テンプレ文面"
+      ],
+      "tables": [
+        "users",
+        "settings",
+        "notification_templates"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-61",
+      "app": "A",
+      "area": "settings",
+      "name": "監査ログ",
+      "phase": 1,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "誰が何を変えたか",
+      "elements": [
+        "一覧",
+        "フィルタ",
+        "差分表示"
+      ],
+      "tables": [
+        "audit_logs"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-70",
+      "app": "A",
+      "area": "sv",
+      "name": "SV活動 一覧",
+      "phase": 2,
+      "roles": [
+        "hq",
+        "sv"
+      ],
+      "purpose": "面談・訪問履歴の一覧",
+      "elements": [
+        "会社×月",
+        "チェック項目の進捗",
+        "未面談一覧"
+      ],
+      "tables": [
+        "sv_activities"
+      ],
+      "notes": "現行「SV活動」タブの置き換え",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-71",
+      "app": "A",
+      "area": "sv",
+      "name": "SV活動 記録",
+      "phase": 2,
+      "roles": [
+        "hq",
+        "sv"
+      ],
+      "purpose": "面談記録の入力（PC）",
+      "elements": [
+        "日時・手段・担当SV",
+        "内容",
+        "チェック項目（エリア撤廃説明・決算書提出等）",
+        "連絡ログ"
+      ],
+      "tables": [
+        "sv_activities"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-72",
+      "app": "A",
+      "area": "sv",
+      "name": "SVダッシュボード",
+      "phase": 2,
+      "roles": [
+        "hq",
+        "sv"
+      ],
+      "purpose": "SV別の担当状況・未対応",
+      "elements": [
+        "SV別カード",
+        "未面談・未提出",
+        "今月の予定"
+      ],
+      "tables": [
+        "sv_activities",
+        "sv_assignments"
+      ],
+      "notes": "",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-80",
+      "app": "A",
+      "area": "lead",
+      "name": "リード（見込み客）一覧",
+      "phase": 2,
+      "roles": [
+        "hq",
+        "sv"
+      ],
+      "purpose": "導入セミナー→面談→加盟のパイプライン",
+      "elements": [
+        "ステータス列",
+        "支部・紹介者・追客担当",
+        "フィルタ"
+      ],
+      "tables": [
+        "leads"
+      ],
+      "notes": "現行「導入セミナー声掛」の置き換え",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-81",
+      "app": "A",
+      "area": "lead",
+      "name": "リード 詳細・活動",
+      "phase": 2,
+      "roles": [
+        "hq",
+        "sv"
+      ],
+      "purpose": "受講・面談・加盟確定の記録",
+      "elements": [
+        "基本情報",
+        "活動履歴",
+        "加盟確定→加盟店へ変換"
+      ],
+      "tables": [
+        "leads",
+        "lead_activities",
+        "organizations"
+      ],
+      "notes": "formrunの導入セミナー申込からリード自動生成",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-82",
+      "app": "A",
+      "area": "lead",
+      "name": "KPI",
+      "phase": 2,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "導入セミナー参加数・加盟数の月次 目標／実績（ブロック・SV別）",
+      "elements": [
+        "目標入力",
+        "実績自動集計",
+        "達成率",
+        "グラフ"
+      ],
+      "tables": [
+        "kpi_targets",
+        "leads",
+        "event_registrations"
+      ],
+      "notes": "現行「KPIグラフ」の置き換え",
+      "plans": [
+        "full",
+        "lite"
+      ]
+    },
+    {
+      "id": "A-90",
+      "app": "A",
+      "area": "file",
+      "name": "資料管理",
+      "phase": 2,
+      "roles": [
+        "hq"
+      ],
+      "purpose": "レジュメ・資料のアップロードとイベント紐付け",
+      "elements": [
+        "アップロード",
+        "公開範囲",
+        "イベント紐付け"
+      ],
+      "tables": [
+        "files"
+      ],
+      "notes": "Supabase Storage",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "A-95",
+      "app": "A",
+      "area": "project",
+      "name": "加盟店 案件管理（各社）",
+      "phase": 3,
+      "roles": [
+        "hq",
+        "sv",
+        "member"
+      ],
+      "purpose": "法人DM実績と案件表の入力・閲覧",
+      "elements": [
+        "法人DM一覧・入力",
+        "案件一覧・入力",
+        "会社別集計"
+      ],
+      "tables": [
+        "dm_campaigns",
+        "projects"
+      ],
+      "notes": "任意。自社・SV・本部のみ閲覧",
+      "plans": [
+        "full"
+      ]
+    },
+    {
+      "id": "A-96",
+      "app": "A",
+      "area": "project",
+      "name": "案件 集計（進捗会用）",
+      "phase": 3,
+      "roles": [
+        "hq",
+        "sv"
+      ],
+      "purpose": "グループ別・月別の集計",
+      "elements": [
+        "集計表",
+        "CSV"
+      ],
+      "tables": [
+        "dm_campaigns",
+        "projects"
+      ],
+      "notes": "任意",
+      "plans": [
+        "full"
+      ]
+    }
   ]
 }
